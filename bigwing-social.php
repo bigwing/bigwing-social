@@ -26,7 +26,8 @@ function bwsocial_register_nav_menu() {
 	register_nav_menu( 'bw-social', __( 'Social Media Menu', 'bigwing-social' ) );
 }
 
-add_action( 'wp_enqueue_scripts', 'bwsocial_register_scripts' );
+// Register styles for the nav menu
+add_action( 'wp_enqueue_scripts', 'bwsocial_register_scripts', 10, 1 );
 
 /**
  * Register styles for the menu.
@@ -36,5 +37,5 @@ add_action( 'wp_enqueue_scripts', 'bwsocial_register_scripts' );
  * @since 1.0.0
  */
 function bwsocial_register_scripts() {
-	wp_register_style( 'bwsocial', plugins_url( '/css/main.min.css', __FILE__ ), array(), '20170515', 'all' );
+	wp_enqueue_style( 'bwsocial', plugins_url( '/css/main.min.css', __FILE__ ), array(), '20170515', 'all' );
 }

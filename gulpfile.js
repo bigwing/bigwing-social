@@ -40,6 +40,9 @@ gulp.task( 'copysocialfonts', function() {
 
 gulp.task( 'watch', function() {
 	
+	// Watch SASS files
+	gulp.watch( './css/sass/**/*.scss', [ 'sass' ] );
+	
 	// Watch font files
 	gulp.watch( './node_modules/social-logos/icon-font/**/*.{ttf,woff,woff2,eof,eot,svg}', [ 'copysocialfonts' ] );
 } );
