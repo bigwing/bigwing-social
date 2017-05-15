@@ -1,0 +1,22 @@
+{
+  "name": "bigwing-social",
+  "version": "1.0.0",
+  "description": "Social options for WordPress.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "gulp watch",
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.bigwing.io:bigwing/bigwing-social.git"
+  },
+  "author": "BigWing",
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.0.1",
+    "gulp": "^3.9.1",
+    "react": "^15.5.4",
+    "social-logos": "^1.0.1"
+  }
+}
