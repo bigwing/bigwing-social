@@ -5,7 +5,8 @@ var gulp = require('gulp'),
 	autoprefixer = require('gulp-autoprefixer'),
 	sourcemaps = require('gulp-sourcemaps'),
 	rename = require('gulp-rename'),
-	plumber = require('gulp-plumber');
+	plumber = require('gulp-plumber'),
+	phplint = require('phplint')
 
 gulp.task('default', function() {
   // place code for your default task here
@@ -32,10 +33,22 @@ gulp.task( 'sass', function() {
 		.pipe(gulp.dest('./css/'));
 } );
 
-gulp.task( 'copysocialfonts', function() {
-	return gulp.src('./node_modules/social-logos/icon-font/**/*.{ttf,woff,woff2,eof,eot,svg}')
-   .pipe(gulp.dest('./fonts'));
+gulp.task( 'copysocialsvg', function() {
+	return gulp.src('./node_modules/social-logos/svg-sprite/social-logos.svg')
+   .pipe(gulp.dest('./images'));
 } );
+
+gulp.task('phplint', function (cb) {
+	phplint(['./**/*.php', '!node_modules/**/*', '!vendor/**/*'],  { limit: 10 }, 
+		function (err, stdout, stderr) {
+			if (err) {
+				cb(err);
+			} else {
+				cb();
+			}
+		}
+	);
+});
 
 
 gulp.task( 'watch', function() {
@@ -44,9 +57,9 @@ gulp.task( 'watch', function() {
 	gulp.watch( './css/sass/**/*.scss', [ 'sass' ] );
 	
 	// Watch font files
-	gulp.watch( './node_modules/social-logos/icon-font/**/*.{ttf,woff,woff2,eof,eot,svg}', [ 'copysocialfonts' ] );
+	gulp.watch( './node_modules/social-logos/svg-sprite/social-logos.svg', [ 'copysocialsvg' ] );
 } );
 
 gulp.task('default', function() {
-  gulp.start( [ 'copysocialfonts', 'sass' ] );
+  gulp.start( [ 'copysocialsvg', 'sass' ] );
 });
