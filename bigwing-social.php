@@ -66,32 +66,62 @@ function bwsocial_include_svg() {
 }
 add_action( 'wp_footer', 'bwsocial_include_svg', 9999 );
 
-
-
-
 /**
- * Add social styles for menu item.
+ * Get list of SVG icons available.
  *
- * Add social styles for menu item.
+ * Get list of SVG icons available.
  *
  * @since 1.0.0
  * 
- * @param array    $classes The CSS classes that are applied to the menu item's `<li>` element.
- * @param WP_Post  $item    The current menu item.
- * @param stdClass $args    An object of wp_nav_menu() arguments.
- * @param int      $depth   Depth of menu item. Used for padding. 
+ * Forked from twentyseventeen `twentyseventeen_social_links_icons` 
  */
-//add_filter( 'nav_menu_css_class', 'bwsocial_nav_menu_css_class', 10, 4 );
-function bwsocial_nav_menu_css_class( $classes, $item, $args, $depth ) {
-	$location = isset( $args->theme_location ) ? $args->theme_location : false;
-	if ( ! $location || 'bw-social' !== $location ) {
-		return $args;
-	}
-	
-	$url = $item->url;
-	$url = parse_url( $url, PHP_URL_HOST );
-	
-	die( '<pre>' . print_r( $url, true ) );
+function bwsocial_get_icons() {
+	// Supported social links icons.
+	$social_links_icons = array(
+		'a.co' => 'amazon',
+		'amazon.com' => 'amazon',
+		'behance.net' => 'behance',
+		'blogger.com' => 'blogger',
+		'codepen.io' => 'codepen',
+		'dribbble.com' => 'dribble',
+		'dropbox.com' => 'dropbox',
+		'eventbrite.com' => 'eventbrite',
+		'facebook.com' => 'facebook',
+		'flickr.com' => 'flickr',
+		'foursquare.com' => 'foursquare',
+		'ghost.org' => 'ghost',
+		'github.com' => 'github',
+		'github.io' => 'github',
+		'plus.google.com' => 'google-plus',
+		'instagram.com' => 'instagram',
+		'linkedin.com' => 'linkedin',
+		'medium.com' => 'medium',
+		'path.com' => 'path',
+		'pinterest.com' => 'pinterest-alt',
+		'getpocket.com' => 'pocket',
+		'polldaddy.com' => 'polldaddy',
+		'reddit.com' => 'reddit',
+		'skype.com' => 'skype',
+		'spotify.com' => 'spotify',
+		'squarespace.com' => 'squarespace',
+		'stumbleupon.com' => 'stumbleupon',
+		'telegram.org' => 'telegram',
+		'tumblr.com' => 'tumblr-alt',
+		'twitch.tv' => 'twitch',
+		'twitter.com' => 'twitter-alt',
+		'vimeo.com' => 'vimeo',
+		'wordpress.org' => 'wordpress',
+		'wordpress.com' => 'wordpress',
+		'youtu.be' => 'youtube',
+		'youtube.com' => 'youtube'
+	);
+
+	/**
+	 * Filter BW Social Icons.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $social_links_icons
+	 */
+	return apply_filters( 'bigwing/bigwing_social/icons', $social_links_icons );
 }
-
-
