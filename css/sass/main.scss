@@ -6,3 +6,12 @@
 	width: 1px;
 	word-wrap: normal !important;
 }
+
+$sizes: 18 24 36 48;
+@each $size in $sizes {
+	.bw-social-icon-#{$size} svg {
+		height: #{$size}px;
+		width: #{$size}px;
+		vertical-align: top;
+	}
+}

@@ -178,8 +178,15 @@ function bwsocial_nav_menu_args( $args ) {
 		return $args;
 	}
 	
+	$options = get_option( 'bw_social' );
+	$defaults = array(
+		'icon_size' => '24'
+	);
+	$options = wp_parse_args( $options, $defaults );
+	
 	$classes = array(
-		'bw-social-menu'
+		'bw-social-menu',
+		'bw-social-icon-' . absint( $options[ 'icon_size' ] )
 	);
 	$args[ 'container_class' ] .= ltrim( ' ' . implode( ' ', $classes ), ' ' );
 	return $args;
