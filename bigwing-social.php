@@ -162,8 +162,10 @@ function bwsocial_get_icons() {
 
 function bwsocial_get_options_defaults() {
 	$defaults = array(
-		'icon_size'  => '24',
-		'fill_color' => 'gray',
+		'icon_size'         => '24',
+		'fill_color'        => 'gray',
+		'fill_color_custom' => '#767676',
+		'text_color'        => '#FFFFFF'
 	);
 	return $defaults;
 }
@@ -250,7 +252,7 @@ function bwsocial_get_svg( $args = array() ) {
 		}
 	}
 	
-	/* Get Fill Color */
+	/* Get Fill/Text Color */
 	$options = get_option( 'bw_social' );
 	$options = wp_parse_args( $options, bwsocial_get_options_defaults() );
 	$css = array();
