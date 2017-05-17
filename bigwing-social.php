@@ -12,93 +12,11 @@ Text Domain: bigwing-social
 Domain Path: /languages
 */
 
-// Register the default nav menu for the plugin
-add_action( 'after_setup_theme', 'bwsocial_register_nav_menu', 10, 1 );
+require( 'customizer.php' );
 
-/**
- * Register navigation menus for usage.
- *
- * Register navigation menus for usage.
- *
- * @since 1.0.0
- */
-function bwsocial_register_nav_menu() {
-	register_nav_menu( 'bw-social', __( 'Social Media Menu', 'bigwing-social' ) );
-}
-
-
-/**
- * Register styles for the menu.
- *
- * Register styles for the menu.
- *
- * @since 1.0.0
- */
-add_action( 'wp_enqueue_scripts', 'bwsocial_register_scripts', 10, 1 );
-function bwsocial_register_scripts() {
-	wp_enqueue_style( 'bwsocial', plugins_url( '/css/main.min.css', __FILE__ ), array(), '20170515', 'all' );
-}
-
-/**
- * Include SVG file in the footer.
- *
- * Include SVG file in the footer.
- *
- * @since 1.0.0
- * 
- * Forked from twentyseventeen `twentyseventeen_include_svg_icons` 
- */
-add_action( 'wp_footer', 'bwsocial_include_svg', 9999 );
-function bwsocial_include_svg() {
-
-	// Define SVG sprite file.
-	$path = '/images/social-logos.svg';
-	$svg_icons = rtrim( plugin_dir_path(__FILE__), '/' );
-	if ( ! empty( $path ) && is_string( $path) ) {
-		$svg_icons .= '/' . ltrim( $path, '/' );
-	}
-
-	// If it exists, include it.
-	if ( file_exists( $svg_icons ) ) {
-		echo '<div style="position: absolute; height: 0; width: 0; overflow: hidden;">';
-		require_once( $svg_icons );
-		echo '</div>';
-	}
-}
-
-/**
- * Add screen reader span around link text in menu item.
- *
- * Add screen reader span around link text in menu item.
- *
- * @since 1.0.0
- * 
- * @param stdClass $args  An object of wp_nav_menu() arguments.
- * @param WP_Post  $item  Menu item data object.
- * @param int      $depth Depth of menu item. Used for padding.
- */
-add_filter( 'nav_menu_item_args', 'bwsocial_nav_menu_item_args', 10, 3 );
-function bwsocial_nav_menu_item_args( $args, $item, $depth ) {
-	$location = isset( $args->theme_location ) ? $args->theme_location : false;
-	if ( ! $location || 'bw-social' !== $location ) {
-		return $args;
-	}
-	
-	// Wrap text in span so it can be hidden via CSS
-	$args->link_before = '<span class="bw-screen-reader-text">';
-	$args->link_after = '</span>';
-	
-	// Add SVG Icons
-	$maybe_icons = bwsocial_get_icons();
-	foreach ( $maybe_icons as $attr => $value ) {
-		if ( false !== strpos( $item->url, $attr ) ) {
-			$args->link_after .= bwsocial_get_svg( array( 'icon' => esc_attr( $value ) ) );
-		}
-	}
-	
-	
-	return $args;
-}
+add_action( 'plugins_loaded', function() {
+	load_plugin_textdomain( 'bigwing-social', false, basename( dirname( __FILE__ ) ) . '/languages' );
+} );
 
 /**
  * Get list of SVG icons available.
@@ -112,42 +30,42 @@ function bwsocial_nav_menu_item_args( $args, $item, $depth ) {
 function bwsocial_get_icons() {
 	// Supported social links icons.
 	$social_links_icons = array(
-		'a.co' => 'amazon',
-		'amazon.com' => 'amazon',
-		'behance.net' => 'behance',
-		'blogger.com' => 'blogger',
-		'codepen.io' => 'codepen',
-		'dribbble.com' => 'dribble',
-		'dropbox.com' => 'dropbox',
-		'eventbrite.com' => 'eventbrite',
-		'facebook.com' => 'facebook',
-		'flickr.com' => 'flickr',
-		'foursquare.com' => 'foursquare',
-		'ghost.org' => 'ghost',
-		'github.com' => 'github',
-		'github.io' => 'github',
+		'a.co'            => 'amazon',
+		'amazon.com'      => 'amazon',
+		'behance.net'     => 'behance',
+		'blogger.com'     => 'blogger',
+		'codepen.io'      => 'codepen',
+		'dribbble.com'    => 'dribble',
+		'dropbox.com'     => 'dropbox',
+		'eventbrite.com'  => 'eventbrite',
+		'facebook.com'    => 'facebook',
+		'flickr.com'      => 'flickr',
+		'foursquare.com'  => 'foursquare',
+		'ghost.org'       => 'ghost',
+		'github.com'      => 'github',
+		'github.io'       => 'github',
 		'plus.google.com' => 'google-plus',
-		'instagram.com' => 'instagram',
-		'linkedin.com' => 'linkedin',
-		'medium.com' => 'medium',
-		'path.com' => 'path',
-		'pinterest.com' => 'pinterest-alt',
-		'getpocket.com' => 'pocket',
-		'polldaddy.com' => 'polldaddy',
-		'reddit.com' => 'reddit',
-		'skype.com' => 'skype',
-		'spotify.com' => 'spotify',
+		'instagram.com'   => 'instagram',
+		'linkedin.com'    => 'linkedin',
+		'medium.com'      => 'medium',
+		'path.com'        => 'path',
+		'pinterest.com'   => 'pinterest-alt',
+		'getpocket.com'   => 'pocket',
+		'polldaddy.com'   => 'polldaddy',
+		'reddit.com'      => 'reddit',
+		'skype.com'       => 'skype',
+		'spotify.com'     => 'spotify',
 		'squarespace.com' => 'squarespace',
 		'stumbleupon.com' => 'stumbleupon',
-		'telegram.org' => 'telegram',
-		'tumblr.com' => 'tumblr-alt',
-		'twitch.tv' => 'twitch',
-		'twitter.com' => 'twitter-alt',
-		'vimeo.com' => 'vimeo',
-		'wordpress.org' => 'wordpress',
-		'wordpress.com' => 'wordpress',
-		'youtu.be' => 'youtube',
-		'youtube.com' => 'youtube'
+		'telegram.org'    => 'telegram',
+		'tumblr.com'      => 'tumblr-alt',
+		'twitch.tv'       => 'twitch',
+		'twitter.com'     => 'twitter-alt',
+		'vimeo.com'       => 'vimeo',
+		'wordpress.org'   => 'wordpress',
+		'wordpress.com'   => 'wordpress',
+		'youtu.be'        => 'youtube',
+		'youtube.com'     => 'youtube'
 	);
 
 	/**
@@ -168,36 +86,6 @@ function bwsocial_get_options_defaults() {
 		'text_color'        => '#FFFFFF'
 	);
 	return $defaults;
-}
-
-add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
-/**
- * Add menu-level classes.
- *
- * Add menu-level classes.
- *
- * @since 1.0.0
- * 
- * @see wp_nav_menu()
- *
- * @param array $args Array of wp_nav_menu() arguments. 
- */
-function bwsocial_nav_menu_args( $args ) {
-	$location = isset( $args[ 'theme_location' ] ) ? $args[ 'theme_location' ] : false;
-	if ( ! $location || 'bw-social' !== $location ) {
-		return $args;
-	}
-	
-	$options = get_option( 'bw_social' );
-	$options = wp_parse_args( $options, bwsocial_get_options_defaults() );
-	
-	$classes = array(
-		'bw-social-menu',
-		'bw-social-icon-' . absint( $options[ 'icon_size' ] ),
-		'bw-social-fill-' . esc_attr( $options[ 'fill_color' ] )
-	);
-	$args[ 'container_class' ] .= ltrim( ' ' . implode( ' ', $classes ), ' ' );
-	return $args;
 }
 
 /**
@@ -294,4 +182,120 @@ function bwsocial_get_svg( $args = array() ) {
 	return $svg;
 }
 
-require( 'customizer.php' );
+/**
+ * Include SVG file in the footer.
+ *
+ * Include SVG file in the footer.
+ *
+ * @since 1.0.0
+ * 
+ * Forked from twentyseventeen `twentyseventeen_include_svg_icons` 
+ */
+add_action( 'wp_footer', 'bwsocial_include_svg', 9999 );
+function bwsocial_include_svg() {
+
+	// Define SVG sprite file.
+	$path = '/images/social-logos.svg';
+	$svg_icons = rtrim( plugin_dir_path(__FILE__), '/' );
+	if ( ! empty( $path ) && is_string( $path) ) {
+		$svg_icons .= '/' . ltrim( $path, '/' );
+	}
+
+	// If it exists, include it.
+	if ( file_exists( $svg_icons ) ) {
+		echo '<div style="position: absolute; height: 0; width: 0; overflow: hidden;">';
+		require_once( $svg_icons );
+		echo '</div>';
+	}
+}
+
+/**
+ * Add screen reader span around link text in menu item.
+ *
+ * Add screen reader span around link text in menu item.
+ *
+ * @since 1.0.0
+ * 
+ * @param stdClass $args  An object of wp_nav_menu() arguments.
+ * @param WP_Post  $item  Menu item data object.
+ * @param int      $depth Depth of menu item. Used for padding.
+ */
+add_filter( 'nav_menu_item_args', 'bwsocial_nav_menu_item_args', 10, 3 );
+function bwsocial_nav_menu_item_args( $args, $item, $depth ) {
+	$location = isset( $args->theme_location ) ? $args->theme_location : false;
+	if ( ! $location || 'bw-social' !== $location ) {
+		return $args;
+	}
+	
+	// Wrap text in span so it can be hidden via CSS
+	$args->link_before = '<span class="bw-screen-reader-text">';
+	$args->link_after = '</span>';
+	
+	// Add SVG Icons
+	$maybe_icons = bwsocial_get_icons();
+	foreach ( $maybe_icons as $attr => $value ) {
+		if ( false !== strpos( $item->url, $attr ) ) {
+			$args->link_after .= bwsocial_get_svg( array( 'icon' => esc_attr( $value ) ) );
+		}
+	}
+	
+	
+	return $args;
+}
+
+
+
+add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
+/**
+ * Add menu-level classes.
+ *
+ * Add menu-level classes.
+ *
+ * @since 1.0.0
+ * 
+ * @see wp_nav_menu()
+ *
+ * @param array $args Array of wp_nav_menu() arguments. 
+ */
+function bwsocial_nav_menu_args( $args ) {
+	$location = isset( $args[ 'theme_location' ] ) ? $args[ 'theme_location' ] : false;
+	if ( ! $location || 'bw-social' !== $location ) {
+		return $args;
+	}
+	
+	$options = get_option( 'bw_social' );
+	$options = wp_parse_args( $options, bwsocial_get_options_defaults() );
+	
+	$classes = array(
+		'bw-social-menu',
+		'bw-social-icon-' . absint( $options[ 'icon_size' ] ),
+		'bw-social-fill-' . esc_attr( $options[ 'fill_color' ] )
+	);
+	$args[ 'container_class' ] .= ltrim( ' ' . implode( ' ', $classes ), ' ' );
+	return $args;
+}
+
+/**
+ * Register navigation menus for usage.
+ *
+ * Register navigation menus for usage.
+ *
+ * @since 1.0.0
+ */
+add_action( 'after_setup_theme', 'bwsocial_register_nav_menu', 10, 1 );
+function bwsocial_register_nav_menu() {
+	register_nav_menu( 'bw-social', __( 'Social Media Menu', 'bigwing-social' ) );
+}
+
+
+/**
+ * Register styles for the menu.
+ *
+ * Register styles for the menu.
+ *
+ * @since 1.0.0
+ */
+add_action( 'wp_enqueue_scripts', 'bwsocial_register_scripts', 10, 1 );
+function bwsocial_register_scripts() {
+	wp_enqueue_style( 'bwsocial', plugins_url( '/css/main.min.css', __FILE__ ), array(), '20170515', 'all' );
+}
