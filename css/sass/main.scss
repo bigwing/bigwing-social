@@ -7,6 +7,7 @@
 	word-wrap: normal !important;
 }
 
+/* Icon Sizes */ 
 $sizes: 18 24 36 48;
 @each $size in $sizes {
 	.bw-social-icon-#{$size} svg {
@@ -14,4 +15,47 @@ $sizes: 18 24 36 48;
 		width: #{$size}px;
 		vertical-align: top;
 	}
+}
+
+/* Social Media Colors */
+$colors: twitter #00aced,
+	amazon #000000,
+	behance #0692e9,
+	blogger #fb8f3d,
+	codepen #000000,
+	dribble #F46899,
+	dropbox #018BD3,
+	eventbrite #f6682F,
+	facebook #3b5998,
+	flickr #ff0084,
+	foursquare #0072b1,
+	ghost #000000,
+	github #070709,
+	google-plus #CF3D2E,
+	instagram #A1755C,
+	linkedin #0085AE,
+	medium #000000,
+	path #000000,
+	pinterest-alt #CC2127,
+	pocket #000000,
+	polldaddy #bc0b0b,
+	reddit #000000,
+	skype #01AEF2,
+	spotify #1ed760,
+	squarespace #000000,
+	stumbleupon #EB4823,
+	telegram #000000,
+	tumblr-alt #314E6C,
+	twitch #4b367c,
+	twitter-alt #00aced,
+	vimeo #1ab7ea,
+	wordpress #21759b,
+	youtube #bb0000
+;
+.bw-social-menu {
+	@each $color in $colors {
+		.icon-#{nth($color,1)} {
+			fill: #{nth($color,2)};
+		}
+	}	
 }

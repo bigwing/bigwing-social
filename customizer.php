@@ -11,7 +11,7 @@ function bwsocial_customize_register( $wp_customize ) {
 	
 	// Icon Size
 	$wp_customize->add_setting( 
-		'bw_social_icon_size',
+		'bw_social[icon_size]',
 		array(
 			'type'    => 'option',
 			'default' => '24'
@@ -19,7 +19,7 @@ function bwsocial_customize_register( $wp_customize ) {
 	);
 	$wp_customize->add_control( new WP_Customize_Control(
 		$wp_customize,
-		'bw_social_icon_size',
+		'bw_social[icon_size]',
 		array(
 			'label'   => __( 'Icon Size', 'bigwing-social' ),
 			'section' => 'bw-social',
