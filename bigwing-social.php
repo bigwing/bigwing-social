@@ -48,6 +48,7 @@ function bwsocial_register_scripts() {
  * 
  * Forked from twentyseventeen `twentyseventeen_include_svg_icons` 
  */
+add_action( 'wp_footer', 'bwsocial_include_svg', 9999 );
 function bwsocial_include_svg() {
 
 	// Define SVG sprite file.
@@ -64,7 +65,40 @@ function bwsocial_include_svg() {
 		echo '</div>';
 	}
 }
-add_action( 'wp_footer', 'bwsocial_include_svg', 9999 );
+
+/**
+ * Add screen reader span around link text in menu item.
+ *
+ * Add screen reader span around link text in menu item.
+ *
+ * @since 1.0.0
+ * 
+ * @param stdClass $args  An object of wp_nav_menu() arguments.
+ * @param WP_Post  $item  Menu item data object.
+ * @param int      $depth Depth of menu item. Used for padding.
+ */
+add_filter( 'nav_menu_item_args', 'bwsocial_nav_menu_item_args', 10, 3 );
+function bwsocial_nav_menu_item_args( $args, $item, $depth ) {
+	$location = isset( $args->theme_location ) ? $args->theme_location : false;
+	if ( ! $location || 'bw-social' !== $location ) {
+		return $args;
+	}
+	
+	// Wrap text in span so it can be hidden via CSS
+	$args->link_before = '<span class="bw-screen-reader-text">';
+	$args->link_after = '</span>';
+	
+	// Add SVG Icons
+	$maybe_icons = bwsocial_get_icons();
+	foreach ( $maybe_icons as $attr => $value ) {
+		if ( false !== strpos( $item->url, $attr ) ) {
+			$args->link_after .= bwsocial_get_svg( array( 'icon' => esc_attr( $value ) ) );
+		}
+	}
+	
+	
+	return $args;
+}
 
 /**
  * Get list of SVG icons available.
@@ -125,3 +159,114 @@ function bwsocial_get_icons() {
 	 */
 	return apply_filters( 'bigwing/bigwing_social/icons', $social_links_icons );
 }
+
+add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
+/**
+ * Add menu-level classes.
+ *
+ * Add menu-level classes.
+ *
+ * @since 1.0.0
+ * 
+ * @see wp_nav_menu()
+ *
+ * @param array $args Array of wp_nav_menu() arguments. 
+ */
+function bwsocial_nav_menu_args( $args ) {
+	$location = isset( $args[ 'theme_location' ] ) ? $args[ 'theme_location' ] : false;
+	if ( ! $location || 'bw-social' !== $location ) {
+		return $args;
+	}
+	
+	$classes = array(
+		'bw-social-menu'
+	);
+	$args[ 'container_class' ] .= ltrim( ' ' . implode( ' ', $classes ), ' ' );
+	return $args;
+}
+
+/**
+ * Return SVG markup.
+ *
+ * Forked from twentyseventeen `twentyseventeen_get_svg`
+ *
+ * @param array $args {
+ *     Parameters needed to display an SVG.
+ *
+ *     @type string $icon  Required SVG icon filename.
+ *     @type string $title Optional SVG title.
+ *     @type string $desc  Optional SVG description.
+ * }
+ * @return string SVG markup.
+ */
+function bwsocial_get_svg( $args = array() ) {
+	// Make sure $args are an array.
+	if ( empty( $args ) ) {
+		return __( 'Please define default parameters in the form of an array.', 'bigwing-social' );
+	}
+
+	// Define an icon.
+	if ( false === array_key_exists( 'icon', $args ) ) {
+		return __( 'Please define an SVG icon filename.', 'bigwing-social' );
+	}
+
+	// Set defaults.
+	$defaults = array(
+		'icon'        => '',
+		'title'       => '',
+		'desc'        => '',
+		'fallback'    => false,
+	);
+
+	// Parse args.
+	$args = wp_parse_args( $args, $defaults );
+
+	// Set aria hidden.
+	$aria_hidden = ' aria-hidden="true"';
+
+	// Set ARIA.
+	$aria_labelledby = '';
+
+	if ( $args['title'] ) {
+		$aria_hidden     = '';
+		$unique_id       = uniqid();
+		$aria_labelledby = ' aria-labelledby="title-' . $unique_id . '"';
+
+		if ( $args['desc'] ) {
+			$aria_labelledby = ' aria-labelledby="title-' . $unique_id . ' desc-' . $unique_id . '"';
+		}
+	}
+
+	// Begin SVG markup.
+	$svg = '<svg class="icon icon-' . esc_attr( $args['icon'] ) . '"' . $aria_hidden . $aria_labelledby . ' role="img">';
+
+	// Display the title.
+	if ( $args['title'] ) {
+		$svg .= '<title id="title-' . $unique_id . '">' . esc_html( $args['title'] ) . '</title>';
+
+		// Display the desc only if the title is already set.
+		if ( $args['desc'] ) {
+			$svg .= '<desc id="desc-' . $unique_id . '">' . esc_html( $args['desc'] ) . '</desc>';
+		}
+	}
+
+	/*
+	 * Display the icon.
+	 *
+	 * The whitespace around `<use>` is intentional - it is a work around to a keyboard navigation bug in Safari 10.
+	 *
+	 * See https://core.trac.wordpress.org/ticket/38387.
+	 */
+	$svg .= ' <use href="#' . esc_html( $args['icon'] ) . '" xlink:href="#' . esc_html( $args['icon'] ) . '"></use> ';
+
+	// Add some markup to use as a fallback for browsers that do not support SVGs.
+	if ( $args['fallback'] ) {
+		$svg .= '<span class="svg-fallback icon-' . esc_attr( $args['icon'] ) . '"></span>';
+	}
+
+	$svg .= '</svg>';
+
+	return $svg;
+}
+
+require( 'customizer.php' );
