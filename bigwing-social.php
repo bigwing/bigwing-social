@@ -210,6 +210,39 @@ function bwsocial_include_svg() {
 }
 
 /**
+ * Whether a menu is a social menu or not.
+ *
+ * Whether a menu is a social menu or not.
+ *
+ * @since 1.0.0
+ * 
+ *
+ * @param array $args Array of wp_nav_menu() arguments. 
+ */
+function bwsocial_maybe_has_menu( $args ) {
+	
+	// Check theme location
+	$location = isset( $args[ 'theme_location' ] ) ? $args[ 'theme_location' ] : false;
+	if ( $location && 'bw-social' === $location ) {
+		return true;
+	}
+	
+	// Check Menu
+	$menu = isset( $args[ 'menu' ] ) ? $args[ 'menu' ] : false;
+	$menu_object = wp_get_nav_menu_object( $menu );
+	if ( $menu_object && is_a( $menu_object, 'WP_Term' ) ) {
+		$menu_locations = get_nav_menu_locations();
+		foreach( $menu_locations as $menu_location => $menu_term_id ) {
+			if ( 'bw-social' === $menu_location && $menu_term_id === $menu_object->term_id ) {
+				return true;
+			}
+		}
+	}
+	
+	return true;
+}
+
+/**
  * Add screen reader span around link text in menu item.
  *
  * Add screen reader span around link text in menu item.
@@ -220,10 +253,9 @@ function bwsocial_include_svg() {
  * @param WP_Post  $item  Menu item data object.
  * @param int      $depth Depth of menu item. Used for padding.
  */
-add_filter( 'nav_menu_item_args', 'bwsocial_nav_menu_item_args', 10, 3 );
+add_filter( 'nav_menu_item_args', 'bwsocial_nav_menu_item_args', 20, 3 );
 function bwsocial_nav_menu_item_args( $args, $item, $depth ) {
-	$location = isset( $args->theme_location ) ? $args->theme_location : false;
-	if ( ! $location || 'bw-social' !== $location ) {
+	if ( ! bwsocial_maybe_has_menu( (array)$args ) ) {
 		return $args;
 	}
 	
@@ -239,11 +271,8 @@ function bwsocial_nav_menu_item_args( $args, $item, $depth ) {
 		}
 	}
 	
-	
 	return $args;
 }
-
-
 
 add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
 /**
@@ -258,8 +287,8 @@ add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
  * @param array $args Array of wp_nav_menu() arguments. 
  */
 function bwsocial_nav_menu_args( $args ) {
-	$location = isset( $args[ 'theme_location' ] ) ? $args[ 'theme_location' ] : false;
-	if ( ! $location || 'bw-social' !== $location ) {
+	
+	if ( ! bwsocial_maybe_has_menu( $args ) ) {
 		return $args;
 	}
 	
@@ -271,7 +300,8 @@ function bwsocial_nav_menu_args( $args ) {
 		'bw-social-icon-' . absint( $options[ 'icon_size' ] ),
 		'bw-social-fill-' . esc_attr( $options[ 'fill_color' ] )
 	);
-	$args[ 'container_class' ] .= ltrim( ' ' . implode( ' ', $classes ), ' ' );
+	$args[ 'container_class' ] .= ' ' . implode( ' ', $classes );
+	$args[ 'container_class' ] = ltrim( $args[ 'container_class' ], ' ' );
 	return $args;
 }
 
