@@ -59,4 +59,22 @@ function bwsocial_customize_register( $wp_customize ) {
 			),
 		)
 	) );
+	
+	// Fill Color Custom
+	$wp_customize->add_setting( 
+		'bw_social[fill_color_custom]',
+		array(
+			'type'    => 'option',
+			'default' => '#767676'
+		)	
+	);
+	$wp_customize->add_control( new WP_Customize_Color_Control(
+		$wp_customize,
+		'bw_social[fill_color_custom]',
+		array(
+			'label'   => __( 'Fill Color Custom', 'bigwing-social' ),
+			'section' => 'bw-social',
+			'setting' => 'bw_social[fill_color_custom]',
+		)
+	) );
 }

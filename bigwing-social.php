@@ -160,6 +160,14 @@ function bwsocial_get_icons() {
 	return apply_filters( 'bigwing/bigwing_social/icons', $social_links_icons );
 }
 
+function bwsocial_get_options_defaults() {
+	$defaults = array(
+		'icon_size'  => '24',
+		'fill_color' => 'gray',
+	);
+	return $defaults;
+}
+
 add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
 /**
  * Add menu-level classes.
@@ -179,11 +187,7 @@ function bwsocial_nav_menu_args( $args ) {
 	}
 	
 	$options = get_option( 'bw_social' );
-	$defaults = array(
-		'icon_size'  => '24',
-		'fill_color' => 'gray',
-	);
-	$options = wp_parse_args( $options, $defaults );
+	$options = wp_parse_args( $options, bwsocial_get_options_defaults() );
 	
 	$classes = array(
 		'bw-social-menu',
@@ -245,9 +249,19 @@ function bwsocial_get_svg( $args = array() ) {
 			$aria_labelledby = ' aria-labelledby="title-' . $unique_id . ' desc-' . $unique_id . '"';
 		}
 	}
+	
+	/* Get Fill Color */
+	$options = get_option( 'bw_social' );
+	$options = wp_parse_args( $options, bwsocial_get_options_defaults() );
+	$css = array();
+	if ( isset( $options[ 'fill_color' ] ) && 'custom' === $options[ 'fill_color' ] ) {
+		$fill_color = $options[ 'fill_color_custom' ];
+		$css[] = sprintf( 'fill: %s', $fill_color );
+	}
+	$css = implode( ';', $css );
 
 	// Begin SVG markup.
-	$svg = '<svg class="icon icon-' . esc_attr( $args['icon'] ) . '"' . $aria_hidden . $aria_labelledby . ' role="img">';
+	$svg = '<svg class="icon icon-' . esc_attr( $args['icon'] ) . '"' . $aria_hidden . $aria_labelledby . ' role="img" style="' . esc_attr( $css ) . '">';
 
 	// Display the title.
 	if ( $args['title'] ) {
