@@ -33,4 +33,30 @@ function bwsocial_customize_register( $wp_customize ) {
 			),
 		)
 	) );
+	
+	// Fill Color
+	$wp_customize->add_setting( 
+		'bw_social[fill_color]',
+		array(
+			'type'    => 'option',
+			'default' => 'gray'
+		)	
+	);
+	$wp_customize->add_control( new WP_Customize_Control(
+		$wp_customize,
+		'bw_social[fill_color]',
+		array(
+			'label'   => __( 'Fill Color', 'bigwing-social' ),
+			'section' => 'bw-social',
+			'setting' => 'bw_social[fill_color]',
+			'type'    => 'select',
+			'choices' => array(
+				'brand'   => __( 'Brand Colors', 'bigwing-social' ),
+				'gray'    => _x( 'Gray', 'color', 'bigwing-social' ),
+				'white'   => _x( 'White', 'color', 'bigwing-social' ), 
+				'black'   => _x( 'Black', 'color', 'bigwing-social' ),
+				'custom'  => __( 'Custom Color', 'bigwing-social' )
+			),
+		)
+	) );
 }

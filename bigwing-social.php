@@ -180,13 +180,15 @@ function bwsocial_nav_menu_args( $args ) {
 	
 	$options = get_option( 'bw_social' );
 	$defaults = array(
-		'icon_size' => '24'
+		'icon_size'  => '24',
+		'fill_color' => 'gray',
 	);
 	$options = wp_parse_args( $options, $defaults );
 	
 	$classes = array(
 		'bw-social-menu',
-		'bw-social-icon-' . absint( $options[ 'icon_size' ] )
+		'bw-social-icon-' . absint( $options[ 'icon_size' ] ),
+		'bw-social-fill-' . esc_attr( $options[ 'fill_color' ] )
 	);
 	$args[ 'container_class' ] .= ltrim( ' ' . implode( ' ', $classes ), ' ' );
 	return $args;

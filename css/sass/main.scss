@@ -52,10 +52,25 @@ $colors: twitter #00aced,
 	wordpress #21759b,
 	youtube #bb0000
 ;
-.bw-social-menu {
+.bw-social-menu.bw-social-fill-brand {
 	@each $color in $colors {
 		.icon-#{nth($color,1)} {
 			fill: #{nth($color,2)};
 		}
 	}	
+}
+.bw-social-menu.bw-social-fill-gray {
+	.icon {
+		fill: #767676;
+	}
+}
+.bw-social-menu.bw-social-fill-white {
+	.icon {
+		fill: #FFFFFF;
+	}
+}
+.bw-social-menu.bw-social-fill-black {
+	.icon {
+		fill: #000000;
+	}
 }
