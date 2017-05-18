@@ -229,6 +229,11 @@ function bwsocial_maybe_has_menu( $args ) {
 	
 	// Check Menu
 	$menu = isset( $args[ 'menu' ] ) ? $args[ 'menu' ] : false;
+	if ( ! $menu ) {
+		return false;
+	}
+	
+	// Get menu object
 	$menu_object = wp_get_nav_menu_object( $menu );
 	if ( $menu_object && is_a( $menu_object, 'WP_Term' ) ) {
 		$menu_locations = get_nav_menu_locations();
@@ -239,7 +244,7 @@ function bwsocial_maybe_has_menu( $args ) {
 		}
 	}
 	
-	return true;
+	return false;
 }
 
 /**
@@ -274,7 +279,6 @@ function bwsocial_nav_menu_item_args( $args, $item, $depth ) {
 	return $args;
 }
 
-add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
 /**
  * Add menu-level classes.
  *
@@ -286,6 +290,7 @@ add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
  *
  * @param array $args Array of wp_nav_menu() arguments. 
  */
+add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
 function bwsocial_nav_menu_args( $args ) {
 	
 	if ( ! bwsocial_maybe_has_menu( $args ) ) {
