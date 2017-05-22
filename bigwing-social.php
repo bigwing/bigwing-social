@@ -201,6 +201,15 @@ function bwsocial_include_svg() {
 		$svg_icons .= '/' . ltrim( $path, '/' );
 	}
 
+	/**
+	 * Filter BW Social Icons Sprite.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string Absolute directory path to SVG sprite
+	 */
+	$svg_icons = apply_filters( 'bigwing/bigwing_social/sprite', $svg_icons );
+
 	// If it exists, include it.
 	if ( file_exists( $svg_icons ) ) {
 		echo '<div style="position: absolute; height: 0; width: 0; overflow: hidden;">';
@@ -290,7 +299,7 @@ function bwsocial_nav_menu_item_args( $args, $item, $depth ) {
  *
  * @param array $args Array of wp_nav_menu() arguments. 
  */
-add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 10, 1 );
+add_filter( 'wp_nav_menu_args', 'bwsocial_nav_menu_args', 20, 1 );
 function bwsocial_nav_menu_args( $args ) {
 	
 	if ( ! bwsocial_maybe_has_menu( $args ) ) {
