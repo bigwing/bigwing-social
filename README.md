@@ -59,6 +59,16 @@ While this plugin tries to do the bulk of the hard work when it comes to social 
 Filter the icon URLs should you need to add your own:
 
 ```php
+/**
+ * Filter BW Social Icons.
+ *
+ * @since 1.0.0
+ *
+ * @param array $social_links_icons
+ */
+```
+
+```php
 add_filter( 'bigwing/bigwing_social/icons', 'twentyten_bwsocial_icons' );
 function twentyten_bwsocial_icons( $icons ) {
 	$icons[ 'fb.com' ] = 'facebook';
