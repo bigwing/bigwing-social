@@ -20,7 +20,21 @@ BigWing Social allows you to use the built-in WordPress menu system to create so
 
 ![assign-menu](https://cloud.githubusercontent.com/assets/636521/26325638/56489628-3efd-11e7-9475-37c2a7371d16.gif)
 
-### Step 4. Adjust Using the Customizer
+### Step 4. Place the Menu via Code
+
+Find where in your theme you would like the menu to go and use:
+
+```php
+wp_nav_menu( 
+	array( 
+		'theme_location' => 'bw-social',
+	)
+);
+```
+
+Where ```bw-social``` is the slug for the new social menu. 
+
+### Step 5. Adjust Settings Using the Customizer
 
 ![screen shot 2017-05-22 at 2 54 44 pm](https://cloud.githubusercontent.com/assets/636521/26325937/a108a4a4-3efe-11e7-8f5b-cc66586404b9.png)
 
