@@ -66,9 +66,6 @@ Filter the icon URLs should you need to add your own:
  *
  * @param array $social_links_icons
  */
-```
-
-```php
 add_filter( 'bigwing/bigwing_social/icons', 'twentyten_bwsocial_icons' );
 function twentyten_bwsocial_icons( $icons ) {
 	$icons[ 'fb.com' ] = 'facebook';
@@ -77,3 +74,21 @@ function twentyten_bwsocial_icons( $icons ) {
 ```
 
 In the example above, we add ```fb.com``` and point it to use ```facebook```.
+
+### bigwing/bigwing_social/sprite
+
+Provide a custom SVG sprite to use:
+
+```php
+/**
+ * Filter BW Social Icons Sprite.
+ *
+ * @since 1.0.0
+ *
+ * @param string Absolute directory path to SVG sprite
+ */
+add_filter( 'bigwing/bigwing_social/sprite', 'twentyten_bwsocial_sprite' );
+function twentyten_bwsocial_sprite( $sprite ) {
+	return '/path/to/sprite.svg';
+}
+```
